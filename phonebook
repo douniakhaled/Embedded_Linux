@@ -1,0 +1,101 @@
+#! /bin/bash
+
+echo "-----------------------Welcome To Your PhoneBook--------------------------------"
+
+x=1 #ondition to exit the while loop
+
+while [ $x -eq 1 ]
+
+do
+	echo " "
+	echo "- please choose an option :"
+	echo "- Insert new contact name and number, with the option -i"
+	echo "- View all saved contacts details, with the option -v"
+	echo "- Search by contact name in the phonebook database, with the option -s"
+	echo "- Delete all records, with -e"
+	echo "- Delete one contact name, with -d"
+	echo "- exit -f"
+	echo -n "Enter your choise : "
+	read option
+	echo " "
+	
+	case $option in
+
+	  i) 
+	    	read -p "Name: " name 
+		read -p "Number: " number 
+		
+		if grep -iq "$name" phonebook.txt
+		then 
+			echo "name already exist"
+		else 
+			echo "Name : ""$name --" " Number : ""$number">> phonebook.txt
+			
+		fi
+	    ;;
+
+	  v)
+	  	if [ -s phonebook.txt ]
+	  	then
+	  		cat phonebook.txt
+	  	else
+	  		echo "the phonebook is empty"
+	    	fi
+	    ;;
+
+	  s)
+	    	read -p "Name: " name
+	    	
+	    	if grep -i "$name" phonebook.txt
+		then 
+			echo " "
+		else 
+			echo "$name""doesn't exist"
+			
+		fi
+	    ;;
+	    
+	  e)
+	    	echo "delete all contacts [yes - no]: "
+	    	read answer
+	    	
+	    	case $answer in
+		
+			yes)
+				>phonebook.txt
+				echo "done";;
+			no)
+				
+				echo "nothing is deleted";;
+			*)
+				echo "please insert an answer";;
+					
+	       esac
+	    ;;
+	    
+	 d)
+	    	read -p "Enter the name you want to delete: " name
+	    	
+	    	if grep -i "$name" phonebook.txt
+		then 
+			sed -i "/$name/d" phonebook.txt
+			echo "done"
+		else 
+			echo "$name""doesn't exist"
+			
+		fi
+	    ;;
+	    
+	   f)
+	    	x=0
+	    	
+	    ;;
+
+	  *)
+	    echo -n "unknown"
+	    ;;
+	esac
+	
+done
+
+	
